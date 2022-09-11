@@ -3262,6 +3262,7 @@ end
    local ShopTab = serv:Channel("Shop")
    local stats = serv:Channel("Stats")
    local player = serv:Channel("Player & ESP")
+   local raid = serv:Channel("Dungeon")
    local tp = serv:Channel("Teleport")
    local misc = serv:Channel("Misc")
    
@@ -3274,6 +3275,78 @@ end
 	elseif placeId == 7449423635 then
 		ThirdWorld = true
 	end
+
+    raid:Toggle("Auto Farm Dungeon",false,function(value)
+        _G.Auto_Dungeon = value
+        StopTween(_G.Auto_Dungeon)
+    end)
+
+        spawn(function()
+            pcall(function() 
+                while wait() do
+                    if _G.Auto_Dungeon then
+                        if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.Timer.Visible == true then
+                            for i,v in pairs(game:GetService("Workspace").Enemies:GetDescendants()) do
+                                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                                    pcall(function()
+                                        repeat wait()
+                                            sethiddenproperty(game:GetService("Players").LocalPlayer,"SimulationRadius",math.huge)
+                                            v.Humanoid.Health = 0
+                                            v.HumanoidRootPart.CanCollide = false
+                                        until not _G.Auto_Dungeon or not v.Parent or v.Humanoid.Health <= 0
+                                    end)
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end)
+
+        spawn(function()
+            pcall(function()
+                while wait() do
+                    if _G.Auto_Dungeon then
+                        if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.Timer.Visible == true then
+                            if game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 5") then
+                                totarget(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 5").CFrame*CFrame.new(0,25,0))
+                            elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 4") then
+                                totarget(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 4").CFrame*CFrame.new(0,25,0))
+                            elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 3") then
+                                totarget(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 3").CFrame*CFrame.new(0,25,0))
+                            elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 2") then
+                                totarget(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 2").CFrame*CFrame.new(0,25,0))
+                            elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 1") then
+                                totarget(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 1").CFrame*CFrame.new(0,25,0))
+                            end
+                        end
+                    end
+                end
+            end)
+        end)
+
+    raid:Toggle("Kill Aura",nil,function(value)
+        Killaura = value
+        end) 
+    spawn(function()
+        while wait() do
+            if Killaura or _G.AutoRaid or RaidSuperhuman then
+                for i,v in pairs(game.Workspace.Enemies:GetDescendants()) do
+                    if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        pcall(function()
+                            repeat wait(.1)
+                                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                                v.Humanoid.Health = 0
+                                v.HumanoidRootPart.CanCollide = false
+                                v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+                                v.HumanoidRootPart.Transparency = 0.8
+                            until not Killaura or not _G.AutoRaid or not RaidSuperhuman or not v.Parent or v.Humanoid.Health <= 0
+                        end)
+                    end
+                end
+            end
+        end
+    end)
 
     local Pointstat = stats:Label("Stat Points")
     
@@ -3551,7 +3624,7 @@ end)
                                                 EquipWeapon(_G.SelectWeapon)
                                                 AutoHaki()                                            
                                                 PosMon = v.HumanoidRootPart.CFrame
-                                                TP1(v.HumanoidRootPart.CFrame * CFrame.new(2,15,3))
+                                                TP1(v.HumanoidRootPart.CFrame * CFrame.new(2,50,3))
                                                 v.HumanoidRootPart.CanCollide = false
                                                 v.Humanoid.WalkSpeed = 0
                                                 v.Head.CanCollide = false
@@ -3570,11 +3643,11 @@ end)
                         else
                             StartMagnet = false
                             if game:GetService("ReplicatedStorage"):FindFirstChild(Mon) then
-                                TP1(game:GetService("ReplicatedStorage"):FindFirstChild(Mon).HumanoidRootPart.CFrame * CFrame.new(15,10,2))
+                                TP1(game:GetService("ReplicatedStorage"):FindFirstChild(Mon).HumanoidRootPart.CFrame * CFrame.new(15,50,2))
                             else
                                 if (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 1 then
                                     if PosMon ~= nil then
-                                        TP1(PosMon * CFrame.new(2,10,15))
+                                        TP1(PosMon * CFrame.new(2,50,15))
                                     else
                                         if OldPos ~= nil then
                                             TP1(OldPos.Position)
@@ -4068,20 +4141,33 @@ end)
                 NameMon = "Head Baker"
                 CFrameQuest = CFrame.new(-1927.91602, 37.7981339, -12842.5391, -0.96804446, 4.22142143e-08, 0.250778586, 4.74911062e-08, 1, 1.49904711e-08, -0.250778586, 2.64211941e-08, -0.96804446)
             elseif MyLevel == 2300 or MyLevel <= 2324 then
-                Mon = "Cocoa Warrior [Lv. 2325]"
+                Mon = "Cocoa Warrior [Lv. 2300]"
                 LevelQuest = 1
                 NameQuest = "ChocQuest1"
                 NameMon = "Cocoa Warrior"
                 CFrameQuest = CFrame.new(231.7711944580078, 24.760038375854492, -12198.9423828125)
-            elseif MyLevel >= 2325 then
-                Mon = "Chocolate Bar Battler [Lv. 2350]"
+            elseif MyLevel == 2325 or MyLevel <= 2349 then
+                Mon = "Chocolate Bar Battler [Lv. 2325]"
                 LevelQuest = 2
                 NameQuest = "ChocQuest1"
                 NameMon = "Chocolate Bar Battler"
                 CFrameQuest = CFrame.new(231.7711944580078, 24.760038375854492, -12198.9423828125)
+            elseif MyLevel == 2350 or MyLevel <= 2374 then
+                Mon = "Sweet Thief [Lv. 2350]"
+                LevelQuest = 1
+                NameQuest = "ChocQuest2"
+                NameMon = "Sweet Thief"
+                CFrameQuest = CFrame.new(149.16629028320312, 24.819992065429688, -12776.2646484375)
+            elseif MyLevel >= 2375 then
+                Mon = "Candy Rebel [Lv. 2375]"
+                LevelQuest = 2
+                NameQuest = "ChocQuest2"
+                NameMon = "Candy Rebel"
+                CFrameQuest = CFrame.new(149.16629028320312, 24.819992065429688, -12776.2646484375)
             end
         end
     end
+
 
     function StopTween(target)
         if not target then
@@ -5156,7 +5242,9 @@ if ThirdWorld then
        "Haunted Castle",
        "Ice Cream Island",
        "Peanut Island",
-       "Cake Land"
+       "Cake Land",
+       "On the Tree",
+       "Chocolate Island"
    }
    tp:Dropdown("Select Island", World, function(Value)
       _G.TpSec = Value
@@ -5215,10 +5303,15 @@ if ThirdWorld then
    if _G.TpSec  == "Cake Land" and _G.TpTo then
       totarget(CFrame.new(-1934.7584228515625, 37.823974609375, -11816.2158203125))
   end
+   if _G.TpSec  == "Chocolate Island" and _G.TpTo then
+    totarget(CFrame.new(-7.47543478012085, 20.54888916015625, -12033.244140625))
+end
+if _G.TpSec  == "On the Tree" and _G.TpTo then
+    totarget(CFrame.new(2962.433837890625, 2281.613037109375, -7228.91796875))
+end
   end)
 end)
 end
-
 spawn(function()
    game:GetService("RunService").Stepped:Connect(function()
       if _G.T then
