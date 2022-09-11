@@ -4614,7 +4614,7 @@ ShopTab:Line()
    game.Workspace.Camera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
 end)
 
-player:Toggle("ESP Chest",false,function(Value)
+main:Toggle("ESP Chest",false,function(Value)
     ChestESP = Value
 	while ChestESP do wait()
         UpdateChest()
