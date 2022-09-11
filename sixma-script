@@ -3306,58 +3306,36 @@ end
     end
 
     raid:Toggle("Auto Farm Dungeon",_G.Auto_Dungeon,function(value)
-        _G.Auto_Dungeon = value
+        NextIsland = value
         _G.T = value
-        _G.StopTween = value
-        if not _G.StopTween then
-            totarget(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+        if value == false then
+            wait(0.2)
+            topos(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
             game:GetService("Workspace").LOL:Destroy()
          end
     end)
 
-        spawn(function()
-            pcall(function() 
-                while wait() do
-                    if _G.Auto_Dungeon then
-                        if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.Timer.Visible == true then
-                            for i,v in pairs(game:GetService("Workspace").Enemies:GetDescendants()) do
-                                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                                    pcall(function()
-                                        repeat wait()
-                                            sethiddenproperty(game:GetService("Players").LocalPlayer,"SimulationRadius",math.huge)
-                                            v.Humanoid.Health = 0
-                                            v.HumanoidRootPart.CanCollide = false
-                                        until not _G.Auto_Dungeon or not v.Parent or v.Humanoid.Health <= 0
-                                    end)
-                                end
-                            end
+    spawn(function()
+        pcall(function()
+            while game:GetService("RunService").Heartbeat:wait() do
+                if NextIsland or RaidSuperhuman or _G.AutoRaid then
+                    if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.Timer.Visible == true and game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 5") or game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 4") or game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 3") or game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 2") or game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 1") then
+                        if game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 5") then
+                            totarget(game:GetService("Workspace")["_WorldOrigin"].Locations["Island 5"].CFrame*CFrame.new(0,80,0))
+                        elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 4") then
+                            totarget(game:GetService("Workspace")["_WorldOrigin"].Locations["Island 4"].CFrame*CFrame.new(0,80,0))
+                        elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 3") then
+                            totarget(game:GetService("Workspace")["_WorldOrigin"].Locations["Island 3"].CFrame*CFrame.new(0,80,0))
+                        elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 2") then
+                            totarget(game:GetService("Workspace")["_WorldOrigin"].Locations["Island 2"].CFrame*CFrame.new(0,80,0))
+                        elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 1") then
+                            totarget(game:GetService("Workspace")["_WorldOrigin"].Locations["Island 1"].CFrame*CFrame.new(0,80,0))
                         end
                     end
                 end
-            end)
+            end
         end)
-
-        spawn(function()
-            pcall(function()
-                while wait() do
-                    if _G.Auto_Dungeon then
-                        if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.Timer.Visible == true then
-                            if game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 5") then
-                                topos(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 5").CFrame*CFrame.new(0,25,0))
-                            elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 4") then
-                                topos(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 4").CFrame*CFrame.new(0,25,0))
-                            elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 3") then
-                                topos(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 3").CFrame*CFrame.new(0,25,0))
-                            elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 2") then
-                                topos(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 2").CFrame*CFrame.new(0,25,0))
-                            elseif game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 1") then
-                                topos(game:GetService("Workspace")["_WorldOrigin"].Locations:FindFirstChild("Island 1").CFrame*CFrame.new(0,25,0))
-                            end
-                        end
-                    end
-                end
-            end)
-        end)
+    end)
 
     raid:Toggle("Kill Aura",nil,function(value)
         Killaura = value
@@ -4636,11 +4614,73 @@ ShopTab:Line()
    game.Workspace.Camera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
 end)
 
+player:Toggle("ESP Chest",false,function(Value)
+    ChestESP = Value
+	while ChestESP do wait()
+        UpdateChest()
+    end
+end)
+
+function UpdateChest()
+	for i,v in pairs(game.Workspace:GetChildren()) do
+		pcall(function()
+			if v.Name == "Chest1" or v.Name == "Chest2" or v.Name == "Chest3" then
+				if ChestESP then
+					if (v.Name == "Chest1" or v.Name == "Chest2" or v.Name == "Chest3") and (v.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 60000 then
+						if not v:FindFirstChild("ChestESP"..Number) then
+							local Bb = Instance.new("BillboardGui", v)
+							Bb.Name = "ChestESP"..Number
+							Bb.ExtentsOffset = Vector3.new(0, 1, 0)
+							Bb.Size = UDim2.new(1, 200, 1, 30)
+							Bb.Adornee = v
+							Bb.AlwaysOnTop = true
+							local Textlb = Instance.new("TextLabel", Bb)
+							Textlb.Font = "GothamBold"
+							Textlb.FontSize = "Size14"
+							Textlb.Size = UDim2.new(1,0,1,0)
+							Textlb.BackgroundTransparency = 1
+							Textlb.TextStrokeTransparency = 0.5
+							if v.Name == "Chest1" then
+								Textlb.TextColor3 = Color3.fromRGB(174, 123, 47)
+								Textlb.Text = "Bronze Chest".."\n"..math.round((v.Position - game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/3).." m."
+							end
+							if v.Name == "Chest2" then
+								Textlb.TextColor3 = Color3.fromRGB(255, 255, 127)
+								Textlb.Text = "Gold Chest".."\n"..math.round((v.Position - game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/3).." m."
+							end
+							if v.Name == "Chest3" then
+								Textlb.Text = "Diamond Chest".."\n"..math.round((v.Position - game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/3).." m."
+								Textlb.TextColor3 = Color3.fromRGB(5, 243, 255)
+							end
+						else
+							v["ChestESP"..Number].TextLabel.Text = v.Name.."\n"..math.round((v.Position - game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/3).." m."
+						end
+					end
+				else
+					if v:FindFirstChild("ChestESP"..Number) then
+						v:FindFirstChild("ChestESP"..Number):Destroy()
+					end
+				end
+			end
+		end)
+	end
+end
+
 main:Toggle("AutoSetSpawn", true, function(ssp)
 _G.Setspawn = ssp
 end)
 
 main:Line()
+
+local EliteProgress = main:Label("")
+    
+spawn(function()
+    pcall(function()
+        while wait() do
+            EliteProgress:Refresh("Elite Progress : "..game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("EliteHunter","Progress"))
+        end
+    end)
+end)
 
 main:Toggle("Auto Elite Hunter",_G.AutoElitehunter,function(value)
     _G.AutoElitehunter = value
