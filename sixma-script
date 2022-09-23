@@ -5645,6 +5645,8 @@ main:Toggle("Auto Farm Cake Prince",_G.AutoDoughtBoss,function(value)
       end
 end)
 
+
+
 spawn(function()
     while wait() do
         if _G.AutoDoughtBoss then
@@ -6154,6 +6156,57 @@ spawn(function()
             end
         end
     end)
+end)
+
+main:Toggle("Auto Cursed Dual Katana",_G.AutoCursedDualKatana,function(Value)
+    _G.AutoCursedDualKatana = Value
+    _G.T = Value
+    if Value == false then
+        topos(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+        game:GetService("Workspace").LOL:Destroy()
+     end
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.AutoCursedDualKatana and ThirdWorld then
+                totarget(CFrame.new(-12131.298828125, 577.8182373046875, -6707.45458984375))
+                local A_1 = "CDKQuest"
+                local A_2 = "OpenDoor"
+                local A_3 = true
+                local Event = game:GetService("ReplicatedStorage").Remotes["CommF_"]
+                Event:InvokeServer(A_1, A_2, A_3)
+                totarget(CFrame.new(-12391.302734375, 603.3455810546875, -6596.18896484375))
+                local A_1 = "CDKQuest"
+                local A_2 = "StartTrial"
+                local A_3 = "Good"
+                local Event = game:GetService("ReplicatedStorage").Remotes["CommF_"]
+                Event:InvokeServer(A_1, A_2, A_3)
+                totarget(CFrame.new(-9529.998046875, 7.245209693908691, -8374.9111328125))
+                local A_1 = "CDKQuest"
+                local A_2 = "BoatQuest"
+                local A_3 = game:GetService("Workspace").NPCs["Luxury Boat Dealer"]
+                local Event = game:GetService("ReplicatedStorage").Remotes["CommF_"]
+                Event:InvokeServer(A_1, A_2, A_3)
+                totarget(CFrame.new(-6124.94580078125, 16.446548461914062, -2250.6611328125))
+                local A_1 = "CDKQuest"
+                local A_2 = "BoatQuest"
+                local A_3 = game:GetService("Workspace").NPCs["Luxury Boat Dealer"]
+                local Event = game:GetService("ReplicatedStorage").Remotes["CommF_"]
+                Event:InvokeServer(A_1, A_2, A_3)
+                totarget(CFrame.new(4000.05859375, 10.089399337768555, -2655.71337890625))
+                local A_1 = "CDKQuest"
+                local A_2 = "BoatQuest"
+                local A_3 = game:GetService("Workspace").NPCs["Luxury Boat Dealer"]
+                local Event = game:GetService("ReplicatedStorage").Remotes["CommF_"]
+                Event:InvokeServer(A_1, A_2, A_3)
+                
+
+                
+            end
+        end)
+    end
 end)
 
 spawn(function()
@@ -7122,8 +7175,8 @@ end)
         wait()
         totarget(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
         wait()
-        if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("LOL") then
-            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("LOL"):Destroy()
+        if game:GetService("Workspace"):FindFirstChild("LOL") then
+            game:GetService("Workspace"):FindFirstChild("LOL"):Destroy()
         end
         Tween:Stop()
         _G.StopTween = false
@@ -7138,4 +7191,3 @@ end
             end
          end
       end)
-print("Start SixMa Hub ...")
